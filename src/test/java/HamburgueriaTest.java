@@ -6,6 +6,9 @@ import Hamburgueria.Combos.Combo;
 import Hamburgueria.Combos.ComboPremium;
 import Hamburgueria.Combos.ComboPromocional;
 import Hamburgueria.Combos.ComboTradicional;
+import Hamburgueria.Descontos.ClienteFrequente;
+import Hamburgueria.Descontos.DescontoSextaFeira;
+import Hamburgueria.Descontos.Pedidos;
 import Hamburgueria.Hamburguer.FabricaXBacon;
 import Hamburgueria.Hamburguer.FabricaXBurguer;
 import Hamburgueria.Hamburguer.FabricaXSalada;
@@ -155,8 +158,31 @@ public class HamburgueriaTest {
         assertTrue(hamburguer.temQueijo());
         assertTrue(hamburguer.temMaionese());
         assertTrue(hamburguer.temKetchup());
-        
+
     }
+
+    // STRATEGY TESTS USADO PARA DESCONTOS
+
+    @Test
+    public void deveAplicarDescontoClienteFrequente10(){ // 10 pedidos+
+
+        Pedidos pedidos = new Pedidos(100.0, new ClienteFrequente(10));
+
+        assertEquals(80.0, pedidos.getValorFinal(),0.01);
+    }
+
+    @Test
+    public void deveAplicarDescontoClienteFrequente5(){  //5 pedidos+
+        Pedidos pedidos = new Pedidos(100.0, new ClienteFrequente(5));
+
+        assertEquals(85.0, pedidos.getValorFinal(), 0.01);
+    }
+    @Test
+    public void deveAplicarDescontoSextaFeira(){
+        Pedidos pedidos = new Pedidos(100.0, new DescontoSextaFeira());
+        assertEquals(95.0, pedidos.getValorFinal());
+    }
+
 }
 
 
