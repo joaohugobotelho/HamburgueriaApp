@@ -13,6 +13,8 @@ import Hamburgueria.Hamburguer.FabricaXTudo;
 import Hamburgueria.Hamburguer.Hamburguer;
 
 
+import Hamburgueria.HamburguerPersonalizado.MonteHamburguer;
+import Hamburgueria.HamburguerPersonalizado.PersonalizarHamburguer;
 import org.junit.jupiter.api.Test;
 public class HamburgueriaTest {
 
@@ -125,6 +127,35 @@ public class HamburgueriaTest {
         assertEquals("Brownie",
                 combo.criarSobremesa().getNome()
         );
+    }
+
+    //BUILDER TEST
+    @Test
+    public void deveMontarHamburguerPersonalizado(){
+
+        PersonalizarHamburguer hamburguer =
+                new MonteHamburguer()
+                        .comHamburguer()
+                        .comPao()
+                        .comBacon()
+                        .comOvo()
+                        .comQueijo()
+                        .comAlface()
+                        .comTomate()
+                        .comKetchup()
+                        .comMaionese()
+                        .build();
+
+        assertTrue(hamburguer.temHamburguer());
+        assertTrue(hamburguer.temAlface());
+        assertTrue(hamburguer.temTomate());
+        assertTrue(hamburguer.temPao());
+        assertTrue(hamburguer.temBacon());
+        assertTrue(hamburguer.temOvo());
+        assertTrue(hamburguer.temQueijo());
+        assertTrue(hamburguer.temMaionese());
+        assertTrue(hamburguer.temKetchup());
+        
     }
 }
 
