@@ -18,6 +18,10 @@ import Hamburgueria.Hamburguer.Hamburguer;
 
 import Hamburgueria.HamburguerPersonalizado.MonteHamburguer;
 import Hamburgueria.HamburguerPersonalizado.PersonalizarHamburguer;
+import Hamburgueria.Notificando.Cozinha;
+import Hamburgueria.Notificando.Notificar;
+import Hamburgueria.Notificando.PainelPedidos;
+import Hamburgueria.Notificando.ReceberPedido;
 import org.junit.jupiter.api.Test;
 public class HamburgueriaTest {
 
@@ -181,6 +185,27 @@ public class HamburgueriaTest {
     public void deveAplicarDescontoSextaFeira(){
         Pedidos pedidos = new Pedidos(100.0, new DescontoSextaFeira());
         assertEquals(95.0, pedidos.getValorFinal());
+    }
+
+    // TEST OBSERVER
+    @Test
+    public void deveNotificarCozinhaPainel(){
+
+        ReceberPedido pedido = new ReceberPedido();
+
+        Cozinha cozinha = new Cozinha();
+
+        PainelPedidos painel = new PainelPedidos();
+
+        pedido.adicionarNotificacao(cozinha);
+
+        pedido.adicionarNotificacao(painel);
+
+        pedido.criarPedido();
+
+        assertEquals("Novo pedido recebido.", cozinha.getUltimaMensagem());
+
+        assertEquals("Novo pedido recebido.", painel.getUtlimaMensagem());
     }
 
 }
