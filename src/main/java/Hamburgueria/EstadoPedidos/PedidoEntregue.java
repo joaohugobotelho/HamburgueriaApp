@@ -1,8 +1,9 @@
 package Hamburgueria.EstadoPedidos;
 
-public class Recebido implements EstadoPedido{
+public class PedidoEntregue implements EstadoPedido{
+
     @Override
     public String getEstado(){
-        return "Recebido.";
+        return "Pedido entregue.";
     }
 }

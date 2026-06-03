@@ -9,6 +9,7 @@ import Hamburgueria.Combos.ComboTradicional;
 import Hamburgueria.Descontos.ClienteFrequente;
 import Hamburgueria.Descontos.DescontoSextaFeira;
 import Hamburgueria.Descontos.Pedidos;
+import Hamburgueria.EstadoPedidos.*;
 import Hamburgueria.Hamburguer.FabricaXBacon;
 import Hamburgueria.Hamburguer.FabricaXBurguer;
 import Hamburgueria.Hamburguer.FabricaXSalada;
@@ -207,6 +208,53 @@ public class HamburgueriaTest {
 
         assertEquals("Novo pedido recebido.", painel.getUtlimaMensagem());
     }
+
+    // TEST STATE
+
+    // pedido recebido
+
+    @Test
+    public void deveIniciarRecebido(){
+
+        PedidoEstado pedido = new PedidoEstado();
+
+        assertEquals("Recebido.", pedido.getEstado());
+    }
+
+    // pedido em preparo
+
+    @Test
+    public void deveIniciarPreparo(){
+
+        EmPreparo preparo = new EmPreparo();
+
+        assertEquals("Pedido sendo preparado.", preparo.getEstado());
+    }
+
+    // pedido pronto
+    @Test
+    public void deveFicarPronto(){
+        PedidoPronto pronto = new PedidoPronto();
+
+        assertEquals("Pedido pronto.", pronto.getEstado());
+    }
+
+    // pedido saiu pra entrega
+    @Test
+    public void deveSairEntrega(){
+        SaiuPraEntrega entrega = new SaiuPraEntrega();
+
+        assertEquals("Pedido saiu pra entrega.", entrega.getEstado());
+    }
+
+    // pedido entregue
+    @Test
+    public void deveEntregar(){
+        PedidoEntregue entregue = new PedidoEntregue();
+
+        assertEquals("Pedido entregue.", entregue.getEstado());
+    }
+
 
 }
 
