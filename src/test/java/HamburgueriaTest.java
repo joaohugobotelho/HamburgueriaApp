@@ -2,6 +2,10 @@ package Hamburgueria;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import Hamburgueria.AdicionaExtras.BaconExtra;
+import Hamburgueria.AdicionaExtras.BurguerBase;
+import Hamburgueria.AdicionaExtras.Extra;
+import Hamburgueria.AdicionaExtras.QueijoExtra;
 import Hamburgueria.Combos.Combo;
 import Hamburgueria.Combos.ComboPremium;
 import Hamburgueria.Combos.ComboPromocional;
@@ -255,7 +259,26 @@ public class HamburgueriaTest {
         assertEquals("Pedido entregue.", entregue.getEstado());
     }
 
+    // DECORATOR TEST
 
+
+    // extra de bacon
+    @Test
+    public void deveAdicionarBacon(){
+
+        Extra extra = new BaconExtra(new BurguerBase());
+
+        assertEquals(19.0, extra.getPreco(), 0.01);
+    }
+
+    // extra de queijo
+    @Test
+    public void deveAdicionarQueijo(){
+
+        Extra extra = new QueijoExtra(new BurguerBase());
+
+        assertEquals(18.0, extra.getPreco(), 0.01);
+    }
 }
 
 
