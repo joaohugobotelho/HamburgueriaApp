@@ -7,10 +7,16 @@ import Hamburgueria.Combos.Combo;
 import Hamburgueria.Combos.ComboPremium;
 import Hamburgueria.Combos.ComboPromocional;
 import Hamburgueria.Combos.ComboTradicional;
+import Hamburgueria.Comunicacao.ComunicaCozinha;
+import Hamburgueria.Comunicacao.ComunicaEntregador;
+import Hamburgueria.Comunicacao.ComunicaHamburgueria;
 import Hamburgueria.Descontos.ClienteFrequente;
 import Hamburgueria.Descontos.DescontoSextaFeira;
 import Hamburgueria.Descontos.Pedidos;
 import Hamburgueria.EstadoPedidos.*;
+import Hamburgueria.EtapaLanches.PrepararLanches;
+import Hamburgueria.EtapaLanches.PrepararXBacon;
+import Hamburgueria.EtapaLanches.PrepararXTudo;
 import Hamburgueria.Hamburguer.FabricaXBacon;
 import Hamburgueria.Hamburguer.FabricaXBurguer;
 import Hamburgueria.Hamburguer.FabricaXSalada;
@@ -24,6 +30,12 @@ import Hamburgueria.Notificando.Cozinha;
 import Hamburgueria.Notificando.Notificar;
 import Hamburgueria.Notificando.PainelPedidos;
 import Hamburgueria.Notificando.ReceberPedido;
+import Hamburgueria.PedidoComposto.*;
+import Hamburgueria.Sistema.SistemaPedido;
+import Hamburgueria.Validacoes.PedidoValidacao;
+import Hamburgueria.Validacoes.ValidadorEstoque;
+import Hamburgueria.Validacoes.ValidadorPedido;
+import Hamburgueria.Validacoes.ValidarPagamento;
 import org.junit.jupiter.api.Test;
 public class HamburgueriaTest {
 
@@ -284,6 +296,107 @@ public class HamburgueriaTest {
         Extra extra = new CalabresaExtra(new BurguerBase());
 
         assertEquals(19.50, extra.getPreco(), 0.01);
+    }
+
+    //PREPARAR LANCHES TEMPLATE METHOD xbacon e xtudo exemplo
+
+    @Test
+    public void devePrepararXBacon(){
+        PrepararLanches lanche = new PrepararXBacon();
+        assertTrue(lanche.preparar().contains("Bacon e Queijo"));
+    }
+    @Test
+    public void devePrepararXTudo(){
+        PrepararXTudo lanche = new PrepararXTudo();
+        assertTrue(lanche.preparar().contains("Bacon, ovo, queijo, frango, calabresa, presunto, molho e salada"));
+    }
+
+    // TEST MEDIATOR
+
+    @Test
+    public void deveEnviarMensagemProsUsuarios(){
+        ComunicaHamburgueria comunica = new ComunicaHamburgueria();
+
+        ComunicaCozinha cozinha = new ComunicaCozinha(comunica, "Cozinha");
+
+        ComunicaEntregador entregador = new ComunicaEntregador(comunica, "João");
+        comunica.adicionarUsuario(cozinha);
+        comunica.adicionarUsuario(entregador);
+        cozinha.enviar("Pedido pronto");
+        assertEquals("Pedido pronto", entregador.getUltimaMensagem());
+
+    }
+
+    // TEST COMPOSITE DE UM PEDIDO COMPLETO
+
+    @Test
+    public void deveSomarPedidoCompleto(){
+        TotalPedido pedido = new TotalPedido();
+        pedido.adicionar(new Xburguer());
+        pedido.adicionar(new Fritas());
+        pedido.adicionar((new Refrigerante()));
+        pedido.adicionar(new Churros());
+    }
+
+    //TEST COMPOSITE DE UM BURGUER E BATATA
+
+    @Test
+    public void deveSomarXburguerFritas(){
+        TotalPedido pedido = new TotalPedido();
+        pedido.adicionar(new Xburguer());
+        pedido.adicionar(new Fritas());
+    }
+
+    // TEST DO FAÇADE VERIFICANDO ESTOQUE. PEDIDO, PAGAMENTO E ENTREGA
+    @Test
+    public void deveRealizarPedidoCompleto(){
+
+        SistemaPedido sistema = new SistemaPedido();
+        String resultado = sistema.realizarPedido();
+        assertTrue(resultado.contains("Estoque verificado"));
+        assertTrue(resultado.contains("Pagamento aprovado"));
+        assertTrue(resultado.contains("Pedido sendo preparado"));
+        assertTrue(resultado.contains("Entrega gerada"));
+    }
+
+    //TEST CHAIN OF RESPONSABILITY
+    // PEDIDO APROVADO
+    @Test
+    public void deveAprovarPedido() {
+        PedidoValidacao pedido = new PedidoValidacao(true, true, true);
+        ValidadorPedido pedidoVal = new ValidadorPedido();
+        ValidadorEstoque estoqueVal = new ValidadorEstoque();
+        ValidarPagamento pagamentoVal = new ValidarPagamento();
+
+        pedidoVal.setProximo(estoqueVal);
+        estoqueVal.setProximo(pagamentoVal);
+        assertEquals("Pedido aprovado", pedidoVal.validar(pedido));
+    }
+
+    //TEST SEM ESTOQUE DISPONIVEL
+    @Test
+    public void deveRecusarPorFaltaEstoque(){
+        PedidoValidacao pedido = new PedidoValidacao(true, false,true);
+        ValidadorPedido pedidoVal = new ValidadorPedido();
+        ValidadorEstoque estoqueVal = new ValidadorEstoque();
+        ValidarPagamento pagamentoVal = new ValidarPagamento();
+
+        pedidoVal.setProximo(estoqueVal);
+        estoqueVal.setProximo(pagamentoVal);
+        assertEquals("Produto sem estoque", pedidoVal.validar(pedido));
+    }
+
+    // TEST PAGAMENTO RECUSADO
+    @Test
+    public void devePagamentoRecusado(){
+        PedidoValidacao pedido = new PedidoValidacao(true, true, false);
+        ValidadorPedido pedidoVal = new ValidadorPedido();
+        ValidadorEstoque estoqueVal = new ValidadorEstoque();
+        ValidarPagamento pagamentoVal = new ValidarPagamento();
+
+        pedidoVal.setProximo(estoqueVal);
+        estoqueVal.setProximo(pagamentoVal);
+        assertEquals("Pagamento recusado", pedidoVal.validar(pedido));
     }
 }
 
