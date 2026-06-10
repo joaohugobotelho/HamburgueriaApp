@@ -26,6 +26,9 @@ import Hamburgueria.Hamburguer.Hamburguer;
 
 import Hamburgueria.HamburguerPersonalizado.MonteHamburguer;
 import Hamburgueria.HamburguerPersonalizado.PersonalizarHamburguer;
+import Hamburgueria.Iterator.Item;
+import Hamburgueria.Iterator.Iterator;
+import Hamburgueria.Iterator.PedidoIterator;
 import Hamburgueria.Notificando.Cozinha;
 import Hamburgueria.Notificando.Notificar;
 import Hamburgueria.Notificando.PainelPedidos;
@@ -397,6 +400,37 @@ public class HamburgueriaTest {
         pedidoVal.setProximo(estoqueVal);
         estoqueVal.setProximo(pagamentoVal);
         assertEquals("Pagamento recusado", pedidoVal.validar(pedido));
+    }
+
+    //TEST ITERATOR
+
+    // TESTE 1 PERCORRENDO PEDIDO
+
+    @Test
+    public void devePercorrerPedido(){
+        PedidoIterator pedido = new PedidoIterator();
+        pedido.adicionarItem( new Item("X-Burguer"));
+
+        pedido.adicionarItem(new Item("Batata-Frita"));
+
+        Iterator iterator = pedido.criarIterator();
+        assertEquals("X-Burguer", iterator.proximo().getNome());
+        assertEquals("Batata-Frita", iterator.proximo().getNome());
+    }
+
+    //TEST 2 VERIFICA SE TEM UM PROXIMO ITEM
+
+    @Test
+    public void deveVerificarSeTemProximo(){
+
+        PedidoIterator pedido = new PedidoIterator();
+        pedido.adicionarItem( new Item("Guaraná"));
+
+        Iterator iterator = pedido.criarIterator();
+        assertTrue(iterator.temProximo());
+
+        iterator.proximo();
+        assertFalse(iterator.temProximo());
     }
 }
 
