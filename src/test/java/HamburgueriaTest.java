@@ -10,6 +10,7 @@ import Hamburgueria.Combos.ComboTradicional;
 import Hamburgueria.Comunicacao.ComunicaCozinha;
 import Hamburgueria.Comunicacao.ComunicaEntregador;
 import Hamburgueria.Comunicacao.ComunicaHamburgueria;
+import Hamburgueria.CopiaItensCardapio.CopiaBurguer;
 import Hamburgueria.Descontos.ClienteFrequente;
 import Hamburgueria.Descontos.DescontoSextaFeira;
 import Hamburgueria.Descontos.Pedidos;
@@ -431,6 +432,18 @@ public class HamburgueriaTest {
 
         iterator.proximo();
         assertFalse(iterator.temProximo());
+    }
+
+    //TEST PADRAO PROTOTYPE
+
+    @Test
+    public void deveClonarHamburguer(){
+        CopiaBurguer original = new CopiaBurguer("X-Tudo", 25.00);
+
+        CopiaBurguer copia = (CopiaBurguer) original.clonar();
+        assertEquals(original.getNome(), copia.getNome());
+        assertEquals(original.getPreco(), copia.getPreco());
+        assertNotSame(original, copia);
     }
 }
 
