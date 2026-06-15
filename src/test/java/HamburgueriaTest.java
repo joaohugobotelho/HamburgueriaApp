@@ -458,6 +458,14 @@ public class HamburgueriaTest {
 
         assertSame(pao1, pao2);
     }
+    @Test
+    public void deveCriarIngredientesDiferentes(){
+        ReutilizaIngredientes pao = FabricaIngredientes.getInredientes("Pão");
+
+        ReutilizaIngredientes queijo = FabricaIngredientes.getInredientes("Queijo");
+
+        assertNotSame(pao, queijo);
+    }
 }
 
 
