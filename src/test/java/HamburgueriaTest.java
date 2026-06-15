@@ -42,6 +42,9 @@ import Hamburgueria.Validacoes.PedidoValidacao;
 import Hamburgueria.Validacoes.ValidadorEstoque;
 import Hamburgueria.Validacoes.ValidadorPedido;
 import Hamburgueria.Validacoes.ValidarPagamento;
+import Hamburgueria.VisitarItem.Bebida;
+import Hamburgueria.VisitarItem.Burguer;
+import Hamburgueria.VisitarItem.RelatorioPreco;
 import org.junit.jupiter.api.Test;
 public class HamburgueriaTest {
 
@@ -465,6 +468,19 @@ public class HamburgueriaTest {
         ReutilizaIngredientes queijo = FabricaIngredientes.getInredientes("Queijo");
 
         assertNotSame(pao, queijo);
+    }
+
+    //TEST PADRAO VISITOR
+
+    @Test
+    public void deveSomarprecos(){
+        Burguer burguer = new Burguer("X-Bacon", 18.0);
+        Bebida bebida = new Bebida("Guaraná", 6.0);
+
+        RelatorioPreco relatorio = new RelatorioPreco();
+        burguer.aceitar(relatorio);
+        bebida.aceitar(relatorio);
+        assertEquals(24.0, relatorio.getTotal(),0.01);
     }
 }
 
