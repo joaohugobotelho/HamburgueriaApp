@@ -35,6 +35,8 @@ import Hamburgueria.Notificando.Notificar;
 import Hamburgueria.Notificando.PainelPedidos;
 import Hamburgueria.Notificando.ReceberPedido;
 import Hamburgueria.PedidoComposto.*;
+import Hamburgueria.ReutilizacaoObjetos.FabricaIngredientes;
+import Hamburgueria.ReutilizacaoObjetos.ReutilizaIngredientes;
 import Hamburgueria.Sistema.SistemaPedido;
 import Hamburgueria.Validacoes.PedidoValidacao;
 import Hamburgueria.Validacoes.ValidadorEstoque;
@@ -444,6 +446,17 @@ public class HamburgueriaTest {
         assertEquals(original.getNome(), copia.getNome());
         assertEquals(original.getPreco(), copia.getPreco());
         assertNotSame(original, copia);
+    }
+
+    // TEST PADRAO FLYWEIGHT
+
+    @Test
+    public void deveReutilizarIngrediente(){
+        ReutilizaIngredientes pao1 = FabricaIngredientes.getInredientes("Pão");
+
+        ReutilizaIngredientes pao2 = FabricaIngredientes.getInredientes("Pão");
+
+        assertSame(pao1, pao2);
     }
 }
 
