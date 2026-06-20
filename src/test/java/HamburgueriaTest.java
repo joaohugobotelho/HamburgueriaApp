@@ -3,6 +3,10 @@ package Hamburgueria;
 import static org.junit.jupiter.api.Assertions.*;
 
 import Hamburgueria.AdicionaExtras.*;
+import Hamburgueria.Comandos.Atendente;
+import Hamburgueria.Comandos.ComandoCancelarPedido;
+import Hamburgueria.Comandos.ComandoRealizarPedido;
+import Hamburgueria.Comandos.PedidoComando;
 import Hamburgueria.Combos.Combo;
 import Hamburgueria.Combos.ComboPremium;
 import Hamburgueria.Combos.ComboPromocional;
@@ -31,10 +35,11 @@ import Hamburgueria.Iterator.Item;
 import Hamburgueria.Iterator.Iterator;
 import Hamburgueria.Iterator.PedidoIterator;
 import Hamburgueria.Notificando.Cozinha;
-import Hamburgueria.Notificando.Notificar;
 import Hamburgueria.Notificando.PainelPedidos;
 import Hamburgueria.Notificando.ReceberPedido;
 import Hamburgueria.PedidoComposto.*;
+import Hamburgueria.AcessosRelatorios.AcessoRelatorio;
+import Hamburgueria.AcessosRelatorios.User;
 import Hamburgueria.ReutilizacaoObjetos.FabricaIngredientes;
 import Hamburgueria.ReutilizacaoObjetos.ReutilizaIngredientes;
 import Hamburgueria.Sistema.SistemaPedido;
@@ -482,6 +487,76 @@ public class HamburgueriaTest {
         bebida.aceitar(relatorio);
         assertEquals(24.0, relatorio.getTotal(),0.01);
     }
+
+    //TEST PADRAO COMMAND
+
+    //TEST 1 REALIZA O PEDIDO E VERIFICA O STATUS
+
+    @Test
+    public void deveRealizarPedido(){
+        PedidoComando pedidoComando = new PedidoComando();
+
+        ComandoRealizarPedido comandoRealizarPedido = new ComandoRealizarPedido(pedidoComando);
+
+        pedidoComando.realizarPedido();
+
+        assertEquals("Pedido realizado.", pedidoComando.getStatus());
+    }
+
+    // TEST 2 CANCELA O PEDIDO E VERIFICA O STATUS
+
+    @Test
+    public void deveCancelarPedido(){
+
+        PedidoComando pedidoComando = new PedidoComando();
+
+        ComandoCancelarPedido comandoCancelarPedido = new ComandoCancelarPedido(pedidoComando);
+
+        pedidoComando.cancelarPedido();
+        assertEquals("Pedido cancelado.", pedidoComando.getStatus());
+    }
+
+    // TEST 3 - EXECUTA O COMANDO UTILIZANDO O ATENDENTE
+
+    @Test
+    public void deveExecutarComandoPeloAtendente(){
+
+        PedidoComando pedidoComando = new PedidoComando();
+
+        Atendente atendente = new Atendente();
+
+        atendente.setComando(new ComandoRealizarPedido(pedidoComando));
+
+        atendente.executarComando();
+
+        assertEquals("Pedido realizado.", pedidoComando.getStatus());
+
+    }
+
+    // TEST DO PADRAO PROXY
+
+    //TEST 1 = nega o acesso caso o user for funcionario
+
+    @Test
+    public void deveNegarAcessoFuncionario(){
+        User user = new User("João", false);
+
+        AcessoRelatorio acessoRelatorio = new AcessoRelatorio(user);
+        assertEquals("Acesso negado.", acessoRelatorio.visualizar());
+    }
+
+    //TEST 2 VERIFICA SE O USER É O GERENTE
+
+    @Test
+    public void devePermitirAcessoGerente(){
+        User user = new User("Hugo", true);
+
+        AcessoRelatorio acessoRelatorio = new AcessoRelatorio(user);
+        assertEquals("Faturamento: R$ 50.000",acessoRelatorio.visualizar());
+    }
+
+
+
 }
 
 
