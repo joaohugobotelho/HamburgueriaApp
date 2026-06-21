@@ -37,6 +37,7 @@ import Hamburgueria.Iterator.PedidoIterator;
 import Hamburgueria.Notificando.Cozinha;
 import Hamburgueria.Notificando.PainelPedidos;
 import Hamburgueria.Notificando.ReceberPedido;
+import Hamburgueria.Pagamentos.*;
 import Hamburgueria.PedidoComposto.*;
 import Hamburgueria.AcessosRelatorios.AcessoRelatorio;
 import Hamburgueria.AcessosRelatorios.User;
@@ -556,6 +557,45 @@ public class HamburgueriaTest {
     }
 
 
+    // TEST PADRAO ADAPTER
+
+    // TEST REALAIZA O PAGAMENTO VIA PIX
+
+    @Test
+    public void deveRealizarPagamentoPix(){
+
+        PixApi pixApi = new PixApi();
+
+        Pagamento pagamento = new PixPagamento(pixApi);
+
+        pagamento.pagar(50.0);
+        assertEquals(50.0, pixApi.getUltimoPagamento());
+    }
+
+    // TEST 2 - PAGAMENTO VIA CARTAO
+
+    @Test
+    public void devePagarComCartao(){
+        CartaoApi cartao = new CartaoApi();
+
+        Pagamento pagamento = new CartaoPagamento(cartao);
+
+        pagamento.pagar(70.0);
+
+        assertEquals(70.0, cartao.ultimoPagamento,0.01);
+    }
+
+    // TEST 3 - VERIFICA O PAGAMENTO DINHEIRO
+
+    @Test
+    public void devePagarComDinheiro(){
+        DinheiroApi dinheiro = new DinheiroApi();
+
+        Pagamento pagamento = new DinheiroPagamento(dinheiro);
+
+        pagamento.pagar(28.0);
+        assertEquals(28.0, dinheiro.ultimoPagamento, 0.01);
+    }
 
 }
 
