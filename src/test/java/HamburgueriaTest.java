@@ -41,6 +41,7 @@ import Hamburgueria.Pagamentos.*;
 import Hamburgueria.PedidoComposto.*;
 import Hamburgueria.AcessosRelatorios.AcessoRelatorio;
 import Hamburgueria.AcessosRelatorios.User;
+import Hamburgueria.Promocoes.*;
 import Hamburgueria.ReutilizacaoObjetos.FabricaIngredientes;
 import Hamburgueria.ReutilizacaoObjetos.ReutilizaIngredientes;
 import Hamburgueria.Sistema.SistemaPedido;
@@ -597,6 +598,29 @@ public class HamburgueriaTest {
         assertEquals(28.0, dinheiro.ultimoPagamento, 0.01);
     }
 
+
+    //TEST PADRAO INTERPRETER
+
+    //TEST 1 VERIFICA SE O CLIENTE E FREQUENTE E É SEXTA FEIRA
+
+    @Test
+    public void deveAplicarPromocao(){
+
+        ClientePromocao cliente = new ClientePromocao(true, true);
+
+        Expressao promocao = new NaoTerminalAnd(new ClienteFrequencia(), new SextaFeira());
+
+        assertTrue(promocao.interpretar(cliente));
+    }
+
+    //TEST 2 - VERIFICA SE É ALGUM OUTRO DIA
+
+    @Test
+    public void naoDeveAplicarPromocao(){
+        ClientePromocao cliente = new ClientePromocao(true, false);
+
+        Expressao promocao = new NaoTerminalAnd(new ClienteFrequencia(), new SextaFeira());
+    }
 }
 
 
