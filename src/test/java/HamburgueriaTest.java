@@ -608,7 +608,7 @@ public class HamburgueriaTest {
 
         ClientePromocao cliente = new ClientePromocao(true, true);
 
-        Expressao promocao = new NaoTerminalAnd(new ClienteFrequencia(), new SextaFeira());
+        Expressao promocao = new FrequenteEDiaPromocao(new ClienteFrequencia(), new SextaFeira());
 
         assertTrue(promocao.interpretar(cliente));
     }
@@ -619,7 +619,7 @@ public class HamburgueriaTest {
     public void naoDeveAplicarPromocao(){
         ClientePromocao cliente = new ClientePromocao(true, false);
 
-        Expressao promocao = new NaoTerminalAnd(new ClienteFrequencia(), new SextaFeira());
+        Expressao promocao = new FrequenteEDiaPromocao(new ClienteFrequencia(), new SextaFeira());
     }
 }
 

@@ -1,11 +1,11 @@
 package Hamburgueria.Promocoes;
 
-public class NaoTerminalAnd implements  Expressao{
+public class FrequenteEDiaPromocao implements  Expressao{
 
     private Expressao esquerda;
     private Expressao direita;
 
-    public NaoTerminalAnd(Expressao esquerda, Expressao direita){
+    public FrequenteEDiaPromocao(Expressao esquerda, Expressao direita){
         this.esquerda =esquerda;
         this.direita = direita;
     }
